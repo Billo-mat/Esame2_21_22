@@ -1,0 +1,28 @@
+def n_subseq(sequence: str, n: int) -> dict[str, int]:
+    """
+    Conta le sottosequenze non sovrapposte di lunghezza n in una stringa.
+
+    >>> n_subseq("ABCABCAB", 2)
+    {'AB': 2, 'CA': 1, 'BC': 1}
+    >>> s = "MFVFLVLLPL"
+    >>> n_subseq(s, 2)
+    {'MF': 1, 'VF': 1, 'LV': 1, 'LL': 1, 'PL': 1}
+    """
+    counts = {}
+    
+    # Lo step del range deve essere n per evitare sovrapposizioni
+    for i in range(0, len(sequence) - n + 1, n):
+        sub = sequence[i:i+n]
+        counts[sub] = counts.get(sub, 0) + 1
+            
+    return counts
+
+# Test sulla sequenza SARS dell'Esercizio 1
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+    
+    # Se 'sequence' è la stringa da 1273 caratteri caricata prima:
+    res = n_subseq(sequence, 2)
+    print(len(res))       # Stamperà: 276
+    print(res.get('LL'))  # Stamperà: 7
