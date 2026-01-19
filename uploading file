@@ -1,0 +1,14 @@
+# 1. Inizializziamo una stringa vuota per accumulare la sequenza
+sequence = ""
+
+# 2. Apriamo il file sars.fasta in modalità lettura
+with open('sars.fasta', 'r') as file:
+    for line in file:
+        # 3. Ignoriamo la riga del commento (header)
+        if not line.startswith('>'):
+            # 4. Rimuoviamo il carattere di newline e aggiungiamo alla stringa
+            sequence += line.strip()
+
+# Verifica del risultato
+print(f"Lunghezza della sequenza: {len(sequence)}")
+# Output atteso: 1273
