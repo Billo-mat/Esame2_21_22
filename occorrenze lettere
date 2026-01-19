@@ -1,0 +1,10 @@
+# 1. Filtriamo il DataFrame per la condizione richiesta (>= 5%)
+frequent_amino_acids = df_sars[df_sars['percentual'] >= 5]
+
+# 2. Stampiamo solo le lettere degli amminoacidi che soddisfano il criterio
+print("Amminoacidi con occorrenza >= 5%:")
+print(frequent_amino_acids['letter'].to_list())
+
+# 3. Visualizzazione dettagliata per verifica
+print("\nDettaglio:")
+print(frequent_amino_acids[['letter', 'percentual']])
