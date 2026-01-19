@@ -1,0 +1,31 @@
+import matplotlib.pyplot as plt
+
+# 1. Caricamento della sequenza (dall'Esercizio 1)
+sequence = ""
+with open('sars.fasta', 'r') as file:
+    for line in file:
+        if not line.startswith('>'):
+            sequence += line.strip()
+
+# 2. Definizione della funzione n_subseq (dall'Esercizio 2)
+def n_subseq(sequence: str, n: int) -> dict[str, int]:
+    counts = {}
+    for i in range(0, len(sequence) - n + 1, n):
+        sub = sequence[i:i+n]
+        counts[sub] = counts.get(sub, 0) + 1
+    return counts
+
+# 3. Conteggio delle singole lettere (n=1)
+letter_counts = n_subseq(sequence, 1)
+
+# 4. Creazione del grafico a torta
+labels = list(letter_counts.keys())
+values = list(letter_counts.values())
+
+plt.figure(figsize=(10, 8))
+plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=140)
+
+# 5. Aggiunta di titolo e visualizzazione
+plt.title('Occurrences of Amino Acids in SARS-CoV-2 Spike Protein', pad = 30)
+plt.axis('equal') # Garantisce che la torta sia circolare
+plt.show()
