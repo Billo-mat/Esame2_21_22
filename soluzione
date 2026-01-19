@@ -1,0 +1,168 @@
+# 1. Inizializziamo una stringa vuota per accumulare la sequenza
+sequence = ""
+
+# 2. Apriamo il file sars.fasta in modalità lettura
+with open('sars.fasta', 'r') as file:
+    for line in file:
+        # 3. Ignoriamo la riga del commento (header)
+        if not line.startswith('>'):
+            # 4. Rimuoviamo il carattere di newline e aggiungiamo alla stringa
+            sequence += line.strip()
+
+# Verifica del risultato
+print(f"Lunghezza della sequenza: {len(sequence)}")
+# Output atteso: 1273
+
+def n_subseq(sequence: str, n: int) -> dict[str, int]:
+    """
+    Conta le sottosequenze non sovrapposte di lunghezza n in una stringa.
+
+    >>> n_subseq("ABCABCAB", 2)
+    {'AB': 2, 'CA': 1, 'BC': 1}
+    >>> s = "MFVFLVLLPL"
+    >>> n_subseq(s, 2)
+    {'MF': 1, 'VF': 1, 'LV': 1, 'LL': 1, 'PL': 1}
+    """
+    counts = {}
+    
+    # Lo step del range deve essere n per evitare sovrapposizioni
+    for i in range(0, len(sequence) - n + 1, n):
+        sub = sequence[i:i+n]
+        counts[sub] = counts.get(sub, 0) + 1
+            
+    return counts
+
+# Test sulla sequenza SARS dell'Esercizio 1
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+    
+    # Se 'sequence' è la stringa da 1273 caratteri caricata prima:
+    res = n_subseq(sequence, 2)
+    print(len(res))       # Stamperà: 276
+    print(res.get('LL'))  # Stamperà: 7
+    
+import matplotlib.pyplot as plt
+
+# 1. Caricamento della sequenza (dall'Esercizio 1)
+sequence = ""
+with open('sars.fasta', 'r') as file:
+    for line in file:
+        if not line.startswith('>'):
+            sequence += line.strip()
+
+# 2. Definizione della funzione n_subseq (dall'Esercizio 2)
+def n_subseq(sequence: str, n: int) -> dict[str, int]:
+    counts = {}
+    for i in range(0, len(sequence) - n + 1, n):
+        sub = sequence[i:i+n]
+        counts[sub] = counts.get(sub, 0) + 1
+    return counts
+
+# 3. Conteggio delle singole lettere (n=1)
+letter_counts = n_subseq(sequence, 1)
+
+# 4. Creazione del grafico a torta
+labels = list(letter_counts.keys())
+values = list(letter_counts.values())
+
+plt.figure(figsize=(10, 8))
+plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=140)
+
+# 5. Aggiunta di titolo e visualizzazione
+plt.title('Occurrences of Amino Acids in SARS-CoV-2 Spike Protein', pad = 30)
+plt.axis('equal') # Garantisce che la torta sia circolare
+plt.show()
+
+
+import pandas as pd
+
+# 1. Otteniamo i conteggi delle singole lettere (n=1) usando la funzione dell'Ex 2
+letter_counts = n_subseq(sequence, 1)
+
+# 2. Creazione del DataFrame iniziale
+df_sars = pd.DataFrame(list(letter_counts.items()), columns=['letter', 'occurrences'])
+
+# 3. Calcolo della colonna 'percentual'
+total_letters = df_sars['occurrences'].sum()
+df_sars['percentual'] = (df_sars['occurrences'] / total_letters) * 100
+
+# 4. Visualizzazione dei primi dati
+print(df_sars.head())
+
+# 1. Filtriamo il DataFrame per la condizione richiesta (>= 5%)
+frequent_amino_acids = df_sars[df_sars['percentual'] >= 5]
+
+# 2. Stampiamo solo le lettere degli amminoacidi che soddisfano il criterio
+print("Amminoacidi con occorrenza >= 5%:")
+print(frequent_amino_acids['letter'].to_list())
+
+# 3. Visualizzazione dettagliata per verifica
+print("\nDettaglio:")
+print(frequent_amino_acids[['letter', 'percentual']])
+
+
+import numpy as np
+
+# 1. Configurazione per la riproducibilità
+# Utilizziamo un seed fisso (es. 42) per ottenere sempre gli stessi risultati
+seed = 42
+rng = np.random.default_rng(seed)
+
+# 2. Preparazione dei caratteri sorgente
+# Trasformiamo la sequenza SARS in un array di singoli caratteri
+chars = np.array(list(sequence))
+
+# 3. Generazione casuale massiva
+# Creiamo una matrice 10.000 x 1.273 campionando con rimpiazzo (replace=True di default)
+# Questo metodo è estremamente veloce rispetto a un ciclo for
+random_matrix = rng.choice(chars, size=(10000, 1273))
+
+# 4. Conversione in lista di stringhe
+# Utilizziamo una list comprehension con join per unire i caratteri di ogni riga
+random_list = ["".join(row) for row in random_matrix]
+
+# Verifica (opzionale)
+print(f"Generate {len(random_list)} stringhe di lunghezza {len(random_list[0])}")
+
+
+# 1. Inizializziamo il contatore
+count_at_most_276 = 0
+
+# 2. Iteriamo su ogni stringa generata nell'Esercizio 6
+for s in random_list:
+    # Calcoliamo il numero di sottosequenze distinte (chiavi del dizionario)
+    num_distinct = len(n_subseq(s, 2))
+    
+    # Verifichiamo la condizione "al massimo 276" (<= 276)
+    if num_distinct <= 276:
+        count_at_most_276 += 1
+
+# 3. Stampiamo il risultato
+print(f"Numero di stringhe con al massimo 276 sottosequenze distinte: {count_at_most_276}")
+
+import numpy as np
+
+def get_unique_subseq_count(seq: str, n: int) -> int:
+    """Restituisce il numero di sottosequenze distinte di lunghezza n."""
+    subs = set()
+    for i in range(0, len(seq) - n + 1, n):
+        subs.add(seq[i:i+n])
+    return len(subs)
+
+# 1. Analisi per n da 2 a 8
+for n in range(2, 9):
+    # Conteggio nella sequenza originale
+    original_count = get_unique_subseq_count(sequence, n)
+    
+    # Conteggio nelle 10.000 stringhe casuali
+    matches = 0
+    for s in random_list:
+        if get_unique_subseq_count(s, n) == original_count:
+            matches += 1
+    
+    # Calcolo della percentuale
+    percentage = (matches / 10000) * 100
+    print(f"Sottosequenze di {n} lettere: {percentage:.2f}% di casi con {original_count} unità distinte.")
+
+
