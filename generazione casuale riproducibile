@@ -1,0 +1,22 @@
+import numpy as np
+
+# 1. Configurazione per la riproducibilità
+# Utilizziamo un seed fisso (es. 42) per ottenere sempre gli stessi risultati
+seed = 42
+rng = np.random.default_rng(seed)
+
+# 2. Preparazione dei caratteri sorgente
+# Trasformiamo la sequenza SARS in un array di singoli caratteri
+chars = np.array(list(sequence))
+
+# 3. Generazione casuale massiva
+# Creiamo una matrice 10.000 x 1.273 campionando con rimpiazzo (replace=True di default)
+# Questo metodo è estremamente veloce rispetto a un ciclo for
+random_matrix = rng.choice(chars, size=(10000, 1273))
+
+# 4. Conversione in lista di stringhe
+# Utilizziamo una list comprehension con join per unire i caratteri di ogni riga
+random_list = ["".join(row) for row in random_matrix]
+
+# Verifica (opzionale)
+print(f"Generate {len(random_list)} stringhe di lunghezza {len(random_list[0])}")
