@@ -1,0 +1,15 @@
+import pandas as pd
+
+# 1. Otteniamo i conteggi delle singole lettere (n=1) usando la funzione dell'Ex 2
+letter_counts = n_subseq(sequence, 1)
+
+# 2. Creazione del DataFrame iniziale
+df_sars = pd.DataFrame(list(letter_counts.items()), columns=['letter', 'occurrences'])
+
+# 3. Calcolo della colonna 'percentual'
+total_letters = df_sars['occurrences'].sum()
+df_sars['percentual'] = (df_sars['occurrences'] / total_letters) * 100
+
+# 4. Visualizzazione dei primi dati
+print(df_sars.head())
+
